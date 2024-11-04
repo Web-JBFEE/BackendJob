@@ -3,7 +3,7 @@ name: CI/CD Deployment
 on:
   push:
     branches:
-      - main
+      - main  # Pastikan nama branch konsisten
 
 jobs:
   deploy:
