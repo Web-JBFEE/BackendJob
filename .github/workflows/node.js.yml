@@ -1,30 +1,22 @@
-name: CI/CD Deployment
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Node.js CI
 
 on:
-  push:
-    branches:
-      - main  # Pastikan nama branch konsisten
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Deploy to Server
-      env:
-        SSH_PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-        SERVER_IP: ${{ secrets.HOST }}
-        USER: ${{ secrets.USERNAME }}
-      run: |
-        mkdir -p ~/.ssh
-        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa $USER@$SERVER_IP << 'EOF'
-          cd /api/Backend
-          git pull origin main
-          docker-compose down
-          docker-compose up -d --build
-        EOF
+    - uses: actions/checkout@v2
+    - name: Use Node.js 18
+      uses: actions/setup-node@v1
+      with:
+        node-version: 18.x
+    - run: npm i
+    - run: npm run build --if-present
+    - run: npm test
