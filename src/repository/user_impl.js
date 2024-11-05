@@ -23,10 +23,33 @@ class UserRepositoryImpl {
             console.log('Creating new user in the database...');
             const savedUser = await User.create(newUser); // Menyimpan user baru
             console.log('User successfully created:', savedUser);
-            return savedUser;
+            return savedUser; // Kembalikan user yang disimpan
         } catch (error) {
             console.error('Detailed error while saving user:', error);
             throw new Error('Failed to register user');
+        }
+    }
+
+    async login(email, password) {
+        if (!email || !password) {
+            throw new Error('Email and password are required');
+        }
+
+        try {
+            const user = await User.findOne({ where: { email } });
+            if (!user) {
+                throw new Error('User not found');
+            }
+
+            const isPasswordValid = await bcrypt.compare(password, user.password);
+            if (!isPasswordValid) {
+                throw new Error('Invalid password');
+            }
+
+            return user; // Kembalikan pengguna yang berhasil login
+        } catch (error) {
+            console.error('Detailed error while logging in:', error);
+            throw new Error('Failed to login');
         }
     }
 }

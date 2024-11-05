@@ -1,12 +1,24 @@
+// Dalam file yang sama (misalnya, user.js)
+class LoginRequest {
+    constructor(email, password = null){
+        this.email = email;  
+        this.password = password;
+    }
+}
+
 class RegisterRequest {
-    constructor(name, firstName, lastName, role, email, password = null) {
-        this.name = name;                   // Nama lengkap
-        this.email = email;                         // Alamat email
-        this.password = password;                   // Kata sandi
+    constructor(name, email, password, firstName, lastName, role){
+        this.name = name;
+        this.email = email;
+        this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
     }
 }
 
-module.exports = RegisterRequest; // Mengekspor kelas
+// Ekspor kedua kelas
+module.exports = {
+    LoginRequest,
+    RegisterRequest
+};
