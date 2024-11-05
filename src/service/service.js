@@ -6,6 +6,7 @@ const RegisterRequest = require('../db/web/user'); // Mengimpor kelas RegisterRe
 class UserService {
     async register(userData) {
         // Buat instance dari RegisterRequest untuk validasi data
+        console.log('Received user data in UserService:', userData);
         const registerRequest = new RegisterRequest(
             userData.name,
             userData.firstName,
@@ -18,10 +19,13 @@ class UserService {
         // Panggil metode register di repositori
         try {
             return await UserRepository.register(registerRequest);
+            const newUser = await UserRepository.register(registerRequest);
         } catch (error) {
+            console.error('Error in UserService register method:', error.message); // Debug log untuk error
             throw new Error(error.message); // Lempar kembali error untuk penanganan lebih lanjut
         }
     }
+    
 
     // Implementasi metode lain yang diperlukan...
 }
